@@ -1,4 +1,5 @@
 <title>키자니아 RPG 시티</title>
+<meta name="robots" content="noindex, nofollow">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Pixelify+Sans:wght@500;600;700&amp;display=swap">
 <style>
@@ -595,6 +596,39 @@ a{color:var(--red-t)}
 .stage-ready{font-size:11px;color:var(--red-t);letter-spacing:.2em}
 @media (max-width:760px){.crew{height:90px}.stage-title{font-size:32px}.landing-title{font-size:26px}.stage-card,.landing-card{padding:16px 18px}}
 @media (prefers-reduced-motion:reduce){.crew{animation:none}}
+
+/* v8: crew walker + light maps */
+.avatar{width:56px;margin:-74px 0 0 -28px}
+.sprite{display:block;width:100%;height:auto;image-rendering:auto;filter:drop-shadow(0 2px 0 rgba(255,255,255,.9)) drop-shadow(0 0 1px rgba(42,37,64,.35));transform-origin:50% 100%;transition:transform .15s ease}
+.avatar.left .sprite,.bavatar.left .sprite{transform:scaleX(-1)}
+.avatar .me{animation:crewIdle 1.6s ease-in-out infinite}
+@keyframes crewIdle{50%{transform:translateY(-3px)}}
+.avatar.walk .me,.bavatar.walk .sprite-wrap{animation:crewWalk .36s ease-in-out infinite}
+@keyframes crewWalk{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+.avatar .name,.bavatar .name{position:absolute;left:50%;top:-18px;transform:translateX(-50%);font-family:var(--f-pixel);font-size:8px;letter-spacing:.06em;background:#FFFFFF;color:var(--fg);padding:3px 7px;border:2px solid var(--coral,#FF987C);border-radius:999px;white-space:nowrap;box-shadow:0 2px 0 rgba(42,37,64,.1);z-index:2}
+.avatar .shadow,.bavatar .shadow{display:block;width:34px;height:8px;margin:-3px auto 0;background:rgba(42,37,64,.16);border-radius:50%}
+.bavatar{width:46px}.bavatar .name{top:-20px}
+.bavatar.walk .sprite{animation:crewWalk .36s ease-in-out infinite}
+.bavatar.walk.left .sprite{animation:crewWalkL .36s ease-in-out infinite}
+.avatar.walk.left .me{animation:crewWalk .36s ease-in-out infinite}
+@keyframes crewWalkL{0%,100%{transform:scaleX(-1) translateY(0) rotate(-4deg)}50%{transform:scaleX(-1) translateY(-6px) rotate(4deg)}}
+/* light world map */
+.mapin img.tile{filter:saturate(.78) brightness(1.08) contrast(.92)}
+.mapin::after{content:"";position:absolute;inset:0;background:rgba(255,253,245,.16);pointer-events:none;z-index:1}
+.pin{z-index:6}
+.pin span{width:34px;height:34px;margin:3px;border:2px solid #FFFFFF;border-radius:10px;font-size:10px;box-shadow:0 3px 0 rgba(42,37,64,.18),0 0 0 2px rgba(42,37,64,.08)}
+.pin:hover span,.pin.on span{transform:scale(1.15);background:var(--gold)!important}
+.pin.seen span{border-color:var(--gold)}
+.tip{border:2px solid var(--edge);border-radius:14px;box-shadow:0 10px 0 rgba(42,37,64,.08),0 18px 40px rgba(42,37,64,.14)}
+.mapwin{border-radius:16px}
+/* light floor board */
+.board-wrap{background:#F4FAFD;border:2px solid var(--edge);border-radius:16px;box-shadow:0 8px 0 rgba(42,37,64,.06)}
+.node > span{border-width:2px;border-radius:14px;box-shadow:0 5px 0 rgba(42,37,64,.08)}
+.node:hover > span{transform:translateY(-3px);box-shadow:0 8px 0 rgba(42,37,64,.1)}
+.node.on > span{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,211,110,.6),0 8px 0 rgba(42,37,64,.1)}
+.mapin img.tile{filter:saturate(.7) brightness(1.1) contrast(.88)}
+.mapin::after{background:rgba(255,253,245,.24)}
+.node .slot,.node span .slot{border-width:2px!important;border-color:var(--edge)!important;border-radius:10px}
 </style>
 
 <div class="wipe" id="wipe" aria-hidden="true"></div>
@@ -696,14 +730,14 @@ a{color:var(--red-t)}
           <img class="tile" src="assets/tile3.jpg" alt="키자니아 국제공항 구역">
           <img class="tile" src="assets/tile4.jpg" alt="호수 공원과 레스토랑 거리 구역">
           <span class="ring" id="ring" hidden></span>
-          <div class="avatar" id="avatar" aria-hidden="true"><div class="me"><span class="name">YOU</span><img src="assets/kid1.svg" alt="" width="56" height="56" class="pix" style="display:block"></div><span class="shadow"></span></div>
+          <div class="avatar" id="avatar" aria-hidden="true"><div class="me"><span class="name">YOU</span><img src="assets/crew_walk.png" alt="" width="56" height="70" class="sprite"></div><span class="shadow"></span></div>
           <div class="tip" id="tip" role="tooltip" hidden></div>
         </div>
       </div>
 
       <div class="hud-l"><div class="win flat" style="padding:14px 16px">
         <div style="display:flex;gap:12px;align-items:center">
-          <div class="slot" style="width:56px;height:56px;display:flex;align-items:center;justify-content:center;flex:none"><img src="assets/kid1.svg" alt="" width="42" height="42" class="pix"></div>
+          <div class="slot" style="width:56px;height:56px;display:flex;align-items:center;justify-content:center;flex:none"><img src="assets/crew_walk.png" alt="" width="36" height="45"></div>
           <div style="flex:1">
             <div style="display:flex;gap:6px;align-items:center"><span class="pf" style="font-size:8px;background:var(--gold);color:#1A1A1A;padding:4px 5px" id="lv">LV.3</span><b style="font-size:14px">어린이 탐험가</b></div>
             <div style="display:flex;align-items:center;gap:6px;margin-top:8px"><span class="pf" style="font-size:7px;color:var(--pink-t);width:26px">HP</span><span class="bar"><i style="width:90%;background:#FF4D6A"></i></span></div>
@@ -713,8 +747,8 @@ a{color:var(--red-t)}
         <div style="margin-top:12px;padding-top:10px;border-top:3px dashed var(--line);font-size:13px;color:var(--soft)">방문한 장소 <b style="color:var(--gold-t)" id="seenCount">0</b> / <span id="spotTotal">22</span></div>
       </div></div>
 
-      <div class="hud-c"><div style="background:var(--red);border:4px solid var(--black);box-shadow:inset -4px -4px 0 var(--red-d),inset 4px 4px 0 var(--red-l),4px 4px 0 var(--black);padding:11px 26px;text-align:center">
-        <div class="pf" style="font-size:8px;color:#8A3B1F">EXPLORE MODE</div>
+      <div class="hud-c"><div style="background:rgba(255,255,255,.94);border:2px solid var(--edge);border-radius:14px;box-shadow:0 6px 0 rgba(42,37,64,.08);padding:11px 26px;text-align:center">
+        <div class="pf" style="font-size:8px;color:var(--red-t)">EXPLORE MODE</div>
         <h1 class="g14" style="font-size:22px;margin:6px 0 0;white-space:nowrap">키자니아 월드맵 탐험</h1>
       </div></div>
 
@@ -946,13 +980,13 @@ a{color:var(--red-t)}
     </div>
     <div class="board-wrap" id="boardWrap">
       <div class="board" id="board">
-        <div aria-hidden="true" style="position:absolute;inset:0;background-image:linear-gradient(#1C2547 2px,transparent 2px),linear-gradient(90deg,#1C2547 2px,transparent 2px);background-size:40px 40px"></div>
-        <div aria-hidden="true" style="position:absolute;left:0;right:0;top:300px;height:80px;background:#232B4A;border-top:4px solid var(--gold);border-bottom:4px solid var(--gold)"></div>
-        <div aria-hidden="true" style="position:absolute;top:0;bottom:0;left:710px;width:80px;background:#232B4A;border-left:4px solid var(--gold);border-right:4px solid var(--gold)"></div>
-        <div aria-hidden="true" style="position:absolute;left:0;right:0;top:338px;border-top:4px dashed #E9EDF7;opacity:.45"></div>
-        <div aria-hidden="true" style="position:absolute;left:665px;top:255px;width:170px;height:170px;border-radius:50%;background:var(--win);border:6px solid var(--gold);display:flex;align-items:center;justify-content:center"><svg width="96" height="96" viewBox="0 0 90 90"><path d="M45 4L54 45L45 86L36 45Z" fill="#FFD23F"/><path d="M4 45L45 36L86 45L45 54Z" fill="#FFD23F"/><rect x="38" y="38" width="14" height="14" fill="#D7263D"/></svg></div>
+        <div aria-hidden="true" style="position:absolute;inset:0;background-image:linear-gradient(#D9EEF6 1px,transparent 1px),linear-gradient(90deg,#D9EEF6 1px,transparent 1px);background-size:40px 40px"></div>
+        <div aria-hidden="true" style="position:absolute;left:0;right:0;top:300px;height:80px;background:#FFF4D9;border-top:2px solid #F3DFAE;border-bottom:2px solid #F3DFAE"></div>
+        <div aria-hidden="true" style="position:absolute;top:0;bottom:0;left:710px;width:80px;background:#FFF4D9;border-left:2px solid #F3DFAE;border-right:2px solid #F3DFAE"></div>
+        <div aria-hidden="true" style="position:absolute;left:0;right:0;top:338px;border-top:3px dashed #FFFFFF;opacity:1"></div>
+        <div aria-hidden="true" style="position:absolute;left:665px;top:255px;width:170px;height:170px;border-radius:50%;background:#FFFFFF;border:3px solid #F3DFAE;box-shadow:0 6px 0 rgba(42,37,64,.06);display:flex;align-items:center;justify-content:center"><svg width="96" height="96" viewBox="0 0 90 90"><path d="M45 4L54 45L45 86L36 45Z" fill="#FFD36E"/><path d="M4 45L45 36L86 45L45 54Z" fill="#BDE7F5"/><rect x="38" y="38" width="14" height="14" rx="3" fill="#FF987C"/></svg></div>
         <div id="nodes"></div>
-        <div class="bavatar" id="bavatar" aria-hidden="true"><span class="pf" style="position:absolute;left:50%;top:-16px;transform:translateX(-50%);font-size:7px;background:var(--gold);color:#1A1A1A;padding:3px 4px;white-space:nowrap">YOU</span><img src="assets/kid1.svg" alt="" width="44" height="44" class="pix" style="display:block"></div>
+        <div class="bavatar" id="bavatar" aria-hidden="true"><span class="name">YOU</span><img src="assets/crew_walk.png" alt="" width="46" height="57" class="sprite"><span class="shadow"></span></div>
       </div>
     </div>
     <div class="win" style="margin-top:30px;padding:22px 24px;display:flex;flex-wrap:wrap;gap:22px;align-items:center">
@@ -1589,6 +1623,7 @@ function setGuide(text){
 function walkTo(fx, fy, spot){
   const W = MW*map.z, H = MH*map.z;
   const dist = Math.hypot((fx - map.av.x)*W, (fy - map.av.y)*H), ms = reduce ? 0 : Math.max(350, Math.min(2600, dist/.32));
+  avatar.classList.toggle('left', fx < map.av.x);
   map.av = { x:fx, y:fy }; avatar.style.transitionDuration = ms + 'ms'; placeAvatar();
   avatar.classList.add('walk'); setGuide();
   ring.hidden = false; ring.style.left = (fx*W) + 'px'; ring.style.top = (fy*H) + 'px';
@@ -1764,8 +1799,8 @@ function renderFloor(){
   $('#flTitle').textContent = f.title; $('#flDistrict').textContent = f.district; $('#flDesc').textContent = f.desc; $('#flChipLabel').textContent = f.chip;
   $('#flChips').innerHTML = f.nodes.map((n,i) => `<button class="fchip" data-i="${i}">0${i+1} ${n[0]}</button>`).join('');
   $('#nodes').innerHTML = f.nodes.map((n,i) => `<button class="node" data-i="${i}" style="left:${n[7]}px;top:${n[8]}px;--c:${n[6]}" aria-label="${n[0]} 선택"><span>
-    <span style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px"><span class="pf" style="font-size:7px;color:${n[6]}">0${i+1}</span><span style="font-size:10px;font-weight:700;background:${n[6]};color:#1A1A1A;padding:2px 7px">${n[5]}</span></span>
-    <span style="display:flex;gap:10px;align-items:center"><span style="width:50px;height:50px;flex:none;background:#fff;border:3px solid #000;display:flex;align-items:center;justify-content:center"><img src="${A(n[2] + '.svg')}" alt="" width="38" height="38" class="pix"></span><span><b style="display:block;font-size:16px">${n[0]}</b><span style="font-size:12px;color:var(--muted)">${n[1]}</span></span></span>
+    <span style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px"><span class="pf" style="font-size:7px;color:${n[6]}">0${i+1}</span><span style="font-size:10px;font-weight:700;background:${n[6]};color:#1A1A1A;padding:2px 8px;border-radius:999px">${n[5]}</span></span>
+    <span style="display:flex;gap:10px;align-items:center"><span style="width:50px;height:50px;flex:none;background:#FFF9E9;border:2px solid var(--edge);border-radius:10px;display:flex;align-items:center;justify-content:center"><img src="${A(n[2] + '.svg')}" alt="" width="38" height="38" class="pix"></span><span><b style="display:block;font-size:16px">${n[0]}</b><span style="font-size:12px;color:var(--muted)">${n[1]}</span></span></span>
     <span style="display:flex;justify-content:space-between;margin-top:11px;padding-top:9px;border-top:3px dashed var(--line);font-size:12px;color:var(--muted)"><b style="color:var(--gold-t)">${n[3]}</b><span>${n[4]}</span></span></span></button>`).join('');
   $$('#nodes .node,#flChips .fchip').forEach(b => b.addEventListener('click', () => selNode(+b.dataset.i)));
   selNode(fm.sel, true);
@@ -1775,6 +1810,7 @@ function selNode(i, instant){
   $$('#nodes .node').forEach((b,j) => b.classList.toggle('on', j === i));
   $$('#flChips .fchip').forEach((b,j) => b.classList.toggle('on', j === i));
   const av = $('#bavatar'); if (instant) av.style.transition = 'none';
+  av.classList.toggle('left', (n[7] + 186) < (parseFloat(av.style.left) || 0));
   av.style.left = (n[7] + 186) + 'px'; av.style.top = (n[8] + 150) + 'px';
   if (instant) { void av.offsetWidth; av.style.transition = ''; } else { av.classList.add('walk'); setTimeout(() => av.classList.remove('walk'), 520); }
   $('#dlgHead').textContent = 'GUIDE · 0' + (i+1) + ' ' + n[0];
